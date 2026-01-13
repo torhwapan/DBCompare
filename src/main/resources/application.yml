@@ -1,0 +1,65 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: db-validator
+
+  # Oracle 数据源配置
+  datasource:
+    oracle:
+      jdbc-url: jdbc:oracle:thin:@localhost:1521:ORCL
+      username: oracle_user
+      password: oracle_password
+      driver-class-name: oracle.jdbc.OracleDriver
+      hikari:
+        pool-name: OracleHikariPool
+        maximum-pool-size: 10
+        minimum-idle: 5
+        connection-timeout: 30000
+        idle-timeout: 600000
+        max-lifetime: 1800000
+    
+    # PostgreSQL 数据源配置
+    postgres:
+      jdbc-url: jdbc:postgresql://localhost:5432/postgres_db
+      username: postgres_user
+      password: postgres_password
+      driver-class-name: org.postgresql.Driver
+      hikari:
+        pool-name: PostgresHikariPool
+        maximum-pool-size: 10
+        minimum-idle: 5
+        connection-timeout: 30000
+        idle-timeout: 600000
+        max-lifetime: 1800000
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+# 数据验证配置
+validator:
+  # 要验证的表列表
+  tables:
+    - user_info
+    - order_info
+    - product_info
+  
+  # 批量查询大小
+  batch-size: 1000
+  
+  # 主键字段（如果所有表主键名称一致）
+  primary-key: id
+  
+  # 忽略的字段（如更新时间等）
+  ignore-fields:
+    - updated_at
+    - last_modified
+
+logging:
+  level:
+    com.example.dbvalidator: DEBUG
+    org.springframework.jdbc: DEBUG

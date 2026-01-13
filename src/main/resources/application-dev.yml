@@ -1,0 +1,44 @@
+# 开发环境配置示例
+server:
+  port: 8080
+
+spring:
+  application:
+    name: db-validator
+
+  datasource:
+    oracle:
+      jdbc-url: jdbc:oracle:thin:@localhost:1521:ORCL
+      username: dev_oracle_user
+      password: dev_oracle_pwd
+      driver-class-name: oracle.jdbc.OracleDriver
+      hikari:
+        pool-name: OracleHikariPool
+        maximum-pool-size: 5
+        minimum-idle: 2
+        connection-timeout: 30000
+    
+    postgres:
+      jdbc-url: jdbc:postgresql://localhost:5432/dev_db
+      username: dev_postgres_user
+      password: dev_postgres_pwd
+      driver-class-name: org.postgresql.Driver
+      hikari:
+        pool-name: PostgresHikariPool
+        maximum-pool-size: 5
+        minimum-idle: 2
+        connection-timeout: 30000
+
+validator:
+  tables:
+    - user_info
+    - order_info
+  batch-size: 500
+  primary-key: id
+  ignore-fields:
+    - updated_at
+    - last_modified
+
+logging:
+  level:
+    com.example.dbvalidator: DEBUG

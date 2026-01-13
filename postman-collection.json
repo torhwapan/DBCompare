@@ -1,0 +1,114 @@
+{
+  "info": {
+    "name": "DB Validator API",
+    "description": "数据库双写验证工具 API 集合",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "健康检查",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/validation/health",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "validation", "health"]
+        },
+        "description": "检查服务健康状态"
+      }
+    },
+    {
+      "name": "验证所有表",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/validation/compare-all",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "validation", "compare-all"]
+        },
+        "description": "验证配置文件中指定的所有表"
+      }
+    },
+    {
+      "name": "验证单个表",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/validation/compare-table/user_info",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "validation", "compare-table", "user_info"]
+        },
+        "description": "验证指定的单个表"
+      }
+    },
+    {
+      "name": "获取文本报告",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/validation/report/text",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "validation", "report", "text"]
+        },
+        "description": "获取文本格式的验证报告"
+      }
+    },
+    {
+      "name": "获取 JSON 报告",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/validation/report/json",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "validation", "report", "json"]
+        },
+        "description": "获取 JSON 格式的验证报告"
+      }
+    },
+    {
+      "name": "下载文本报告",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/validation/report/download/text",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "validation", "report", "download", "text"]
+        },
+        "description": "下载文本格式的验证报告"
+      }
+    },
+    {
+      "name": "下载 JSON 报告",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/validation/report/download/json",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "validation", "report", "download", "json"]
+        },
+        "description": "下载 JSON 格式的验证报告"
+      }
+    }
+  ]
+}

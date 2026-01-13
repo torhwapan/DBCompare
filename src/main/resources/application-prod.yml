@@ -1,0 +1,51 @@
+# 生产环境配置示例
+server:
+  port: 8080
+
+spring:
+  application:
+    name: db-validator
+
+  datasource:
+    oracle:
+      jdbc-url: jdbc:oracle:thin:@prod-oracle-host:1521:PROD
+      username: prod_oracle_user
+      password: ${ORACLE_PASSWORD}  # 使用环境变量
+      driver-class-name: oracle.jdbc.OracleDriver
+      hikari:
+        pool-name: OracleHikariPool
+        maximum-pool-size: 20
+        minimum-idle: 10
+        connection-timeout: 30000
+        idle-timeout: 600000
+        max-lifetime: 1800000
+    
+    postgres:
+      jdbc-url: jdbc:postgresql://prod-postgres-host:5432/prod_db
+      username: prod_postgres_user
+      password: ${POSTGRES_PASSWORD}  # 使用环境变量
+      driver-class-name: org.postgresql.Driver
+      hikari:
+        pool-name: PostgresHikariPool
+        maximum-pool-size: 20
+        minimum-idle: 10
+        connection-timeout: 30000
+        idle-timeout: 600000
+        max-lifetime: 1800000
+
+validator:
+  tables:
+    - user_info
+    - order_info
+    - product_info
+    - inventory_info
+  batch-size: 2000
+  primary-key: id
+  ignore-fields:
+    - updated_at
+    - last_modified
+    - sync_time
+
+logging:
+  level:
+    com.example.dbvalidator: INFO
