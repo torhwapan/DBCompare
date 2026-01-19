@@ -401,6 +401,28 @@ curl -X POST http://localhost:8080/api/mail/send \
 
 欢迎提交 Issue 和 Pull Request！
 
+
+用mybatis-plus来做
+1,接口名称：总量对比  ;    输入:tableName: 表名称，属性：数组startTime: 开始时间endTime: 结束时间  ;   输出: tableName: 表名称startTime: 开始时间endTime: 结束时间oracleCount:  oracle数量postgresCount: postgres数量ratio:  比例（以oracle表为基准） ;备注:全量查询对比所有的表数据，输出的结果是个数组，展示各个表的数据总量对比情况。 开始时间，结束时间的查询条件，用一个参数传递进去，拼接在sql上最好，因为有些表没有这两个时间字段，有些表这两个时间字段的命名又不一样。
+
+2,接口名称：单个表数据对比  ;    输入:tableName: 表名称，属性：非数组，单个表ignoredField:  不对比的字段。 如时间字段等startTime: 开始时间endTime: 结束时间  ;   输出: oracleCount:  oracle数量postgresCount: postgres数量ratio:  比例,onlyInOracle：onlyInPostgres:fieldDifferences ;备注:ignoredField参数用于控制哪些字段忽略对比。开始时间，结束时间的查询条件，用一个参数传递进去，拼接在sql上最好，因为有些表没有这两个时间字段，有些表这两个时间字段的命名又不一样。
+
+
+
+
+
+搭建一个springboot 邮箱仿真服务，要求能接收到 请求端用 javax.mail 基于smtp发出的邮件发送请求。
+
+
+
+
+
+
+
+
+
+
+
 ## 许可证
 
 MIT License
