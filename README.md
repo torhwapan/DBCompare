@@ -309,7 +309,7 @@ A: 减小 `batch-size` 参数，或增加 JVM 堆内存：`java -Xmx2g -jar app.
 
 
 
-
+搭建一个springboot 邮箱仿真服务，要求能接收到 请求端用 javax.mail 基于smtp发出的邮件发送请求。
 
 
 
