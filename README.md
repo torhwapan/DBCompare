@@ -295,6 +295,108 @@ A: 在配置文件的表名中加入 schema 前缀，例如：`schema1.user_info
 
 A: 减小 `batch-size` 参数，或增加 JVM 堆内存：`java -Xmx2g -jar app.jar`
 
+## 新增功能
+
+### 1. 总量对比功能
+
+**接口名称：** 总量对比
+
+**功能描述：** 对比指定时间范围内各表的数据总量
+
+**API 接口：** `POST /api/validation/table-count-comparison`
+
+**输入参数：**
+- `tableNames`: 表名称数组
+- `startTime`: 开始时间
+- `endTime`: 结束时间
+- `timeField`: 时间字段名（因为不同表的时间字段命名可能不同）
+
+**输出参数：**
+- `tableName`: 表名称
+- `startTime`: 开始时间
+- `endTime`: 结束时间
+- `oracleCount`: Oracle数量
+- `postgresCount`: PostgreSQL数量
+- `ratio`: 比例（以Oracle表为基准）
+- `comparisonTime`: 对比时间
+
+**API 调用示例：**
+```bash
+curl -X POST http://localhost:8080/api/validation/table-count-comparison \
+  -H "Content-Type: application/json" \
+  -d '{
+    "tableNames": ["user_info", "order_info"],
+    "startTime": "2023-01-01 00:00:00",
+    "endTime": "2023-12-31 23:59:59",
+    "timeField": "created_at"
+  }'
+```
+
+### 2. 单个表数据对比（带过滤条件）
+
+**接口名称：** 单个表数据对比
+
+**功能描述：** 对比单个表的数据，支持忽略字段和时间范围过滤
+
+**API 接口：** `POST /api/validation/table-data-comparison/{tableName}`
+
+**输入参数：**
+- `tableName`: 表名称
+- `ignoredFields`: 不对比的字段（如时间字段等）
+- `startTime`: 开始时间
+- `endTime`: 结束时间
+- `timeField`: 时间字段名
+
+**输出参数：**
+- `oracleCount`: Oracle数量
+- `postgresCount`: PostgreSQL数量
+- `ratio`: 比例
+- `onlyInOracle`: 仅在Oracle中存在的记录
+- `onlyInPostgres`: 仅在PostgreSQL中存在的记录
+- `fieldDifferences`: 字段差异详情
+
+**API 调用示例：**
+```bash
+curl -X POST http://localhost:8080/api/validation/table-data-comparison/user_info \
+  -H "Content-Type: application/json" \
+  -d '{
+    "ignoredFields": ["updated_at", "last_modified"],
+    "startTime": "2023-01-01 00:00:00",
+    "endTime": "2023-12-31 23:59:59",
+    "timeField": "created_at"
+  }'
+```
+
+### 3. 邮箱仿真服务
+
+**功能描述：** 提供邮箱仿真服务，能够接收使用javax.mail基于SMTP发出的邮件发送请求
+
+**服务特点：**
+- 启动时自动运行SMTP仿真服务器
+- 监听端口 2525
+- 接收邮件发送请求后直接返回成功状态
+- 记录收到的邮件信息到日志
+
+**API 接口：** `POST /api/mail/send`
+
+**使用方式：**
+1. 服务启动后，SMTP仿真服务器会自动运行
+2. 客户端可以使用javax.mail向localhost:2525发送邮件
+3. 仿真服务会接受邮件并返回成功状态
+
+**通过API发送邮件：**
+```bash
+curl -X POST http://localhost:8080/api/mail/send \
+  -H "Content-Type: application/json" \
+  -d '{
+    "from": "sender@example.com",
+    "to": "recipient@example.com",
+    "subject": "测试邮件",
+    "body": "这是通过API发送的测试邮件",
+    "contentType": "text/plain"
+  }'
+```
+
 ## 贡献
 
 欢迎提交 Issue 和 Pull Request！

@@ -1,6 +1,6 @@
 package com.example.dbvalidator.controller;
 
-import com.example.dbvalidator.model.ComparisonResult;
+import com.example.dbvalidator.model.*;
 import com.example.dbvalidator.service.DataComparisonService;
 import com.example.dbvalidator.service.ReportService;
 import lombok.RequiredArgsConstructor;
@@ -143,5 +143,78 @@ public class ValidationController {
         health.put("status", "UP");
         health.put("timestamp", LocalDateTime.now().toString());
         return ResponseEntity.ok(health);
+    }
+    
+    /**
+     * 需求1：总量对比 - 对比指定时间范围内各表的数据总量
+     * 
+     * @param request 总量对比请求参数
+     * @return 各表数据总量对比结果数组
+     */
+    @PostMapping("/table-count-comparison")
+    public ResponseEntity<List<TableCountComparison>> compareTableCounts(@RequestBody TableCountComparisonRequest request) {
+        log.info("开始总量对比，表列表: {}, 时间范围: {} 到 {}", 
+                request.getTableNames(), request.getStartTime(), request.getEndTime());
+        
+        List<TableCountComparison> results = comparisonService.compareTableCounts(
+                request.getTableNames(), 
+                request.getStartTime(), 
+                request.getEndTime(), 
+                request.getTimeField()
+        );
+        
+        return ResponseEntity.ok(results);
+    }
+    
+    /**
+     * 需求2：单个表数据对比（带过滤条件）
+     * 
+     * @param tableName 表名称
+     * @param request 单表数据对比请求参数
+     * @return 单表数据对比结果
+     */
+    @PostMapping("/table-data-comparison/{tableName}")
+    public ResponseEntity<TableDataComparison> compareSingleTableWithDataFilter(
+            @PathVariable String tableName, 
+            @RequestBody SingleTableComparisonRequest request) {
+        
+        log.info("开始单表数据对比: {}, 时间范围: {} 到 {}, 忽略字段: {}", 
+                tableName, request.getStartTime(), request.getEndTime(), request.getIgnoredFields());
+        
+        TableDataComparison result = comparisonService.compareSingleTableWithDataFilter(
+                tableName,
+                request.getIgnoredFields(),
+                request.getStartTime(),
+                request.getEndTime(),
+                request.getTimeField()
+        );
+        
+        return ResponseEntity.ok(result);
+    }
+    
+    /**
+     * 总量对比请求参数模型
+     */
+    @lombok.Data
+    @lombok.NoArgsConstructor
+    @lombok.AllArgsConstructor
+    public static class TableCountComparisonRequest {
+        private List<String> tableNames;
+        private String startTime;
+        private String endTime;
+        private String timeField; // 时间字段名
+    }
+    
+    /**
+     * 单表数据对比请求参数模型
+     */
+    @lombok.Data
+    @lombok.NoArgsConstructor
+    @lombok.AllArgsConstructor
+    public static class SingleTableComparisonRequest {
+        private List<String> ignoredFields;
+        private String startTime;
+        private String endTime;
+        private String timeField; // 时间字段名
     }
 }
