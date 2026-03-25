@@ -443,6 +443,27 @@ DB数据对比。
 
 
 
+Spirngboot项目，现在后端开发完了，想补个前端开发页面。好和后端有交互，预计使用前后端不分离的设计。
+
+
+页面有这些配置：
+
+第一行：菜单栏。横向又分为以下几个部分，每部分有以下几个按钮。
+第一部分，总称：Action： startup,shutdown,end 这三个按钮。
+第二部分，总称：MONITOR： Alarm Event Host SECS Trace Vfei这6个按钮
+第三部分，总称：VIEW： EAP Information , Resource, Scenario这三个按钮
+第四部分，总称：TOOL： Reload EACore,Operation,TaskUI这按个按钮
+
+第二行暂时空着，暂总页面1/6的大小
+
+然后 第一行汇总，第二三四部分的每个按钮，点击一下，就再第二个下方的页面展示对应的子页面，多个子页面可以共存。子页面右上角，有个×可以关闭。
+
+点击Operation时，展示以下内容。
+一，小标题 configuration Files。下面一个表格，列属性分别为： 多选框，DriverID，File Name,File Path,Last Modifited Time,Status。  然后最右边有个Reload按钮
+二，Driver ID，一个下拉框
+三： Vfei to ED 块，占据改行左侧50%，小标题即为‘Vfei to ED’，下面一个下拉框，可以选择 Others,然后一个Send按钮
+四： Vfei Library，Vfei Reply各左右占50%，然后再各横向的分为两块。
+这四块中，左下角这块，可以输入文本。输入后，点击Vfei to ED 的按钮，就将调用后端对应的方法或者接口，然后将方法或者接口返回的结果展示在右下角。
 
 
 
