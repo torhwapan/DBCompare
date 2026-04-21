@@ -416,6 +416,54 @@ curl -X POST http://localhost:8080/api/mail/send \
 
 
 
+DB数据对比。
+做双出测试，系统的数据输出到两个DB表，现在需要对比两个表数据的一致性。使用springboot + mybatis-plus框架来实现，要求分别连接oracle和postgres两个数据库
+功能概述：
+功能1，首先我们有一个配置，名称：config,json格式，有这几个属性：
+属性1： 起始时间，startData，格式类似于：2026-03-24 15:00:09.000
+属性2： 终止时间，endData,格式同上
+属性3： 自动以参数Map。 这里面是个key-value的键值对，如{'factory_id':'A','system_id':'B'}
+属性4： 间隔时间，如2s
+属性5： 最大差异数量，如500
+
+1,系统开放两个接口。分别用来执行和结束DB数据对比任务，同一时间最多允许执行5个任务，每个任务有唯一Id，任务启动时，该Id将输入到日志。
+
+2，执行任务接口的功能如下：
+ 接口输入为config参数，该参数是json格式的，有以下属性。
+属性1： DB参数Map。 这里面是个key-value的键值对，如{'factory_id':'A','system_id':'B','startData':'2026-03-24 15:00:09.000','endData':'2026-03-24 15:00:09.000'}。其中一定会有
+属性4： 间隔时间，如2s
+属性5： 最大差异数量，如500
+属性6： 基准DB，该值输入：oracle 或者 postgres
+
+接口介绍到这几个属性后，开始查询DB数据，首先选择基准DB，然后拼接sql，sql的判断时间有起始时间和终止时间
+
+ 
+
+
+
+
+
+Spirngboot项目，现在后端开发完了，想补个前端开发页面。好和后端有交互，预计使用前后端不分离的设计。
+
+
+页面有这些配置：
+
+第一行：菜单栏。横向又分为以下几个部分，每部分有以下几个按钮。
+第一部分，总称：Action： startup,shutdown,end 这三个按钮。
+第二部分，总称：MONITOR： Alarm Event Host SECS Trace Vfei这6个按钮
+第三部分，总称：VIEW： EAP Information , Resource, Scenario这三个按钮
+第四部分，总称：TOOL： Reload EACore,Operation,TaskUI这按个按钮
+
+第二行暂时空着，暂总页面1/6的大小
+
+然后 第一行汇总，第二三四部分的每个按钮，点击一下，就再第二个下方的页面展示对应的子页面，多个子页面可以共存。子页面右上角，有个×可以关闭。
+
+点击Operation时，展示以下内容。
+一，小标题 configuration Files。下面一个表格，列属性分别为： 多选框，DriverID，File Name,File Path,Last Modifited Time,Status。  然后最右边有个Reload按钮
+二，Driver ID，一个下拉框
+三： Vfei to ED 块，占据改行左侧50%，小标题即为‘Vfei to ED’，下面一个下拉框，可以选择 Others,然后一个Send按钮
+四： Vfei Library，Vfei Reply各左右占50%，然后再各横向的分为两块。
+这四块中，左下角这块，可以输入文本。输入后，点击Vfei to ED 的按钮，就将调用后端对应的方法或者接口，然后将方法或者接口返回的结果展示在右下角。
 
 
 
