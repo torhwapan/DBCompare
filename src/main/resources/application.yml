@@ -63,3 +63,63 @@ logging:
   level:
     com.example.dbvalidator: DEBUG
     org.springframework.jdbc: DEBUG
+
+# ==================== 压测配置 ====================
+loadtest:
+  # MQ配置
+  mq:
+    # MQ Broker地址（以ActiveMQ为例）
+    broker-url: tcp://localhost:61616
+    # 队列名称
+    queue-name: test.queue
+    # 并发生产者数量
+    concurrent-producers: 10
+    # 批量发送大小
+    batch-size: 100
+    # 是否启用持久化
+    persistent: true
+    # 用户名（如果需要认证）
+    # username: admin
+    # 密码（如果需要认证）
+    # password: admin
+
+  # HTTP配置
+  http:
+    # 目标HTTP服务基础URL
+    base-url: http://localhost:8080
+    # 目标接口路径
+    endpoint: /api/data/receive
+    # HTTP方法：POST/GET/PUT
+    method: POST
+    # 并发线程数
+    concurrent-threads: 20
+    # 连接超时时间（毫秒）
+    connect-timeout: 5000
+    # 读取超时时间（毫秒）
+    read-timeout: 10000
+
+  # 压测任务默认配置
+  task:
+    # 基础速率（条/秒），默认11.57条/秒（对应100万条/天）
+    base-rate-per-second: 11.57
+    # 压测倍数（1-10），1倍=100万/天，10倍=1000万/天
+    multiplier: 1
+    # 持续时间（秒），默认86400秒（24小时）
+    duration-seconds: 86400
+    # 批量发送大小
+    batch-size: 100
+    # 预热时间（秒），从0速率逐步提升到目标速率的时间
+    ramp-up-seconds: 300
+    # 流量分布策略：uniform（均匀分布）/ peak（峰值模拟）/ staircase（阶梯递增）
+    traffic-strategy: uniform
+    
+    # 峰值模拟配置（当traffic-strategy=peak时使用）
+    peak-config:
+      # 峰值时段开始小时（0-23）
+      peak-start-hour: 9
+      # 峰值时段结束小时（0-23）
+      peak-end-hour: 18
+      # 峰值倍数（相对于基础速率）
+      peak-multiplier: 3.0
+      # 谷值倍数（非峰值时段）
+      valley-multiplier: 0.3
