@@ -66,22 +66,36 @@ logging:
 
 # ==================== 压测配置 ====================
 loadtest:
-  # MQ配置
+  # RabbitMQ配置（双集群支持）
   mq:
-    # MQ Broker地址（以ActiveMQ为例）
-    broker-url: tcp://localhost:61616
-    # 队列名称
-    queue-name: test.queue
-    # 并发生产者数量
+    # 本地MQ集群配置
+    local:
+      host: localhost
+      port: 5672
+      username: guest
+      password: guest
+      virtual-host: /
+      # 队列和交换机配置
+      queue-name: loadtest.local.queue
+      exchange-name: loadtest.local.exchange
+      routing-key: loadtest.local
+    
+    # 远程MQ集群配置
+    remote:
+      host: 192.168.1.100
+      port: 5672
+      username: admin
+      password: admin123
+      virtual-host: /prod
+      # 队列和交换机配置
+      queue-name: loadtest.remote.queue
+      exchange-name: loadtest.remote.exchange
+      routing-key: loadtest.remote
+    
+    # 压测通用配置
     concurrent-producers: 10
-    # 批量发送大小
     batch-size: 100
-    # 是否启用持久化
     persistent: true
-    # 用户名（如果需要认证）
-    # username: admin
-    # 密码（如果需要认证）
-    # password: admin
 
   # HTTP配置
   http:

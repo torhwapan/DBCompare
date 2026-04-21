@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class LoadTestProperties {
 
     /**
-     * MQ配置
+     * MQ配置（支持双集群）
      */
     private MQConfig mq = new MQConfig();
 

@@ -1,0 +1,33 @@
+# ==================== RabbitMQ跨集群异步Future配置 ====================
+# 方案说明：
+# - 使用CompletableFuture + ConcurrentHashMap实现异步RPC
+# - 支持跨vhost/跨集群通信（不依赖Direct Reply-To）
+# - 请求响应通过唯一requestId手动关联
+# - 发送请求后创建Future存入Map，收到响应后通过requestId完成Future
+
+mq:
+  # 本地MQ集群配置（用于接收响应）
+  # 这是你本地的RabbitMQ，监听这个队列等待对方发送响应
+  local:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+    # 本地交换机和队列（接收对方的响应消息）
+    exchange: loadtest.local.exchange
+    queue: loadtest.local.queue
+    routing-key: loadtest.local
+
+  # 远程MQ集群配置（用于发送请求）
+  # 这是对方的RabbitMQ，发送请求到这个队列
+  remote:
+    host: 192.168.1.100
+    port: 5672
+    username: admin
+    password: admin123
+    virtual-host: /prod
+    # 远程交换机和队列（发送请求到对方的队列）
+    exchange: loadtest.remote.exchange
+    queue: loadtest.remote.queue
+    routing-key: loadtest.remote
